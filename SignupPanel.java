@@ -15,6 +15,10 @@ public class SignupPanel extends JPanel {
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
 
+        JLabel signupLabel = new JLabel("Sign Up");
+        signupLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        signupLabel.setHorizontalAlignment(JLabel.CENTER);
+        form.add(signupLabel);
         //initialize input fields
         usernameInput = new JTextField(15);
         passwordInput = new JTextField(15);

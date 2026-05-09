@@ -1,50 +1,44 @@
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public class DataStorage {
-    private LinkedList<User> users;
+    private HashMap<String, User> users;
     private static DataStorage instance = new DataStorage();
     private DataStorage() {
-        users = new LinkedList<>();
-        users.add(new User("Dom", "p1"));
+        users = new HashMap<String, User>();
+        User admin = new User("Dom", "p1");
+        users.put(admin.getUsername(), admin);
     }
 
     public static DataStorage getInstance() {
         return instance;
     }
     public void addUser(User t_user) {
-        users.add(t_user);
+        users.put(t_user.getUsername(), t_user);
     }
-    public LinkedList<User> getUsers() {
-        if (this.users.isEmpty()) {
-            System.out.println("List is empty.");
+    public User getUser(String key) {
+        if (this.users.isEmpty()) { //
+            System.out.println("Database empty.");
         }
-        return this.users;
+        return this.users.get(key);
     }
 
     public boolean findUser(String username, String password) {
-        for (int i = 0; i < users.size();i++) {
-            if (users.get(i).getUsername().equals(username)) {
-                System.out.println("Username found, checking password match...");
-                if (users.get(i).getPassword().equals(password)) {
-                    System.out.println("Correct username and password, logging in...");
-                    return true;
-                } else {
-                    return false;
-                }
+        if (users.containsKey(username)) {
+            if (users.get(username).getPassword().equals(password)) {
+                return true;
+            } else {
+                return false;
             }
+        } else {
+            return false;
         }
-        return false;
     }
 
     public void removeUser(String username) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUsername().equals(username)) {
-                users.remove(i);
-                System.out.println("User [" + username + "] has been removed.");
-                return;
-            }
+        if (users.remove(username) != null) {
+            System.out.println("User removed.");
+        } else {
+            System.out.println("User not found.");
         }
-        System.out.println("User not found in storage.");
-        return;
     }
 }

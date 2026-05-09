@@ -1,5 +1,7 @@
 // DashboardPanel.java
 import java.awt.*;
+import java.util.concurrent.Flow;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 /*
@@ -12,11 +14,11 @@ public class Dashboard extends JPanel {
     private JButton viewReportButton;
     private JButton settingsButton;
     private JButton signOutButton;
+    private JButton deleteHabitButton;
     private JTextField habitInputField;
     public Dashboard(MainFrame app) {
         //Set dashboard layout
         setLayout(new BorderLayout(10, 10)); 
-
         //WEST Panel -> Habits list
         JPanel habitsPanel = new JPanel(new BorderLayout());
         habitsPanel.setBorder(BorderFactory.createTitledBorder("Habits"));
@@ -55,10 +57,12 @@ public class Dashboard extends JPanel {
         viewReportButton = new JButton("View Report");
         settingsButton = new JButton("Settings");
         signOutButton = new JButton("Sign Out");
+        deleteHabitButton = new JButton("Delete");
         habitInputField = new JTextField(15);
 
         southPanel.add(habitInputField);
         southPanel.add(addHabitButton);
+        southPanel.add(deleteHabitButton);
         southPanel.add(viewReportButton);
         southPanel.add(settingsButton);
         southPanel.add(signOutButton);
@@ -88,6 +92,15 @@ public class Dashboard extends JPanel {
         signOutButton.addActionListener(e -> { //send back to sign up page
             app.showScreen(MainFrame.SIGNUP);
         });
-
+        deleteHabitButton.addActionListener(e -> {
+            Component[] habits = habitsList.getComponents();
+            for (int i = habits.length - 1; i >= 0; i--) {  // iterate backwards to safely remove
+                if (habits[i] instanceof JCheckBox cb && cb.isSelected()) {
+                    habitsList.remove(cb);
+                }
+            }
+            habitsList.revalidate();
+            habitsList.repaint();
+        });
     }
 }

@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 public class LoginPanel extends JPanel {
     private JButton loginButton;
+    private JButton backToSignup;
     private JTextField usernameInputField;
     private JTextField passwordInputField;
 
@@ -9,11 +10,19 @@ public class LoginPanel extends JPanel {
         setLayout(new GridBagLayout());
 
         loginButton = new JButton("Login");
+        backToSignup = new JButton("Back");
         usernameInputField = new JTextField(15);
         passwordInputField = new JTextField(15);
 
         JPanel loginForm = new JPanel();
         loginForm.setLayout(new BoxLayout(loginForm, BoxLayout.Y_AXIS));
+
+        JPanel titlePanel = new JPanel();
+        JLabel loginLabel = new JLabel("Login");
+        loginLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        titlePanel.add(loginLabel);
+        loginForm.add(titlePanel);
+
         JPanel usernamePanel = new JPanel(new FlowLayout());
         usernamePanel.add(new JLabel("Username: "));
         usernamePanel.add(usernameInputField);
@@ -22,9 +31,13 @@ public class LoginPanel extends JPanel {
         passwordPanel.add(new JLabel("Password: "));
         passwordPanel.add(passwordInputField);
         
+        JPanel buttonPanel = new JPanel(new GridLayout());
+        buttonPanel.add(backToSignup);
+        buttonPanel.add(loginButton);
+
         loginForm.add(usernamePanel);
         loginForm.add(passwordPanel);
-        loginForm.add(loginButton);
+        loginForm.add(buttonPanel);
         add(loginForm);
 
         loginButton.addActionListener(e -> {
@@ -44,6 +57,9 @@ public class LoginPanel extends JPanel {
             }
             usernameInputField.setText("");
             passwordInputField.setText("");
+        });
+        backToSignup.addActionListener(e -> {
+            app.showScreen(MainFrame.SIGNUP);
         });
     }
 }
