@@ -10,6 +10,8 @@ Input Spaced Partioning (ISP), Logic Testing, JUnit (1 question entirely on juni
 
 */
 public class Dashboard extends JPanel {
+    private int northStarGoalCount = 0;
+    private int numOfHabits = 0;
     private JButton addHabitButton;
     private JButton viewReportButton;
     private JButton settingsButton;
@@ -24,8 +26,8 @@ public class Dashboard extends JPanel {
         habitsPanel.setBorder(BorderFactory.createTitledBorder("Habits"));
         JPanel habitsList = new JPanel();
         habitsList.setLayout(new BoxLayout(habitsList, BoxLayout.Y_AXIS)); //show list vertically
-        habitsList.add(new JCheckBox("Habit1"));
-
+        habitsList.add(new JCheckBox("Test Habit"));
+        numOfHabits += 1;
         habitsPanel.add(new JScrollPane(habitsList), BorderLayout.CENTER);
         habitsPanel.setPreferredSize(new Dimension(200, 0));
 
@@ -33,8 +35,8 @@ public class Dashboard extends JPanel {
         
         JPanel dailyProgress = new JPanel(new BorderLayout());
         dailyProgress.setBorder(BorderFactory.createTitledBorder("Daily Progress"));
-        JProgressBar progressBar = new JProgressBar(0, 100);
-        progressBar.setValue(10);
+        JProgressBar progressBar = new JProgressBar(0, numOfHabits);
+        progressBar.setValue(0); //initial value of progress bar = 0
         dailyProgress.add(progressBar, BorderLayout.CENTER);
 
         /* NORTH STAR PANEL */
@@ -49,6 +51,7 @@ public class Dashboard extends JPanel {
         JCheckBox testGoal = new JCheckBox("Test Goal");
         testGoal.setAlignmentX(Component.LEFT_ALIGNMENT); //center checkbox
         northStarList.add(testGoal);
+        northStarGoalCount += 1;
 
         JPanel centeredList = new JPanel(new FlowLayout(FlowLayout.CENTER));
         centeredList.add(northStarList);
@@ -91,11 +94,9 @@ public class Dashboard extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
         add(eastPanel, BorderLayout.EAST);
         add(southPanel, BorderLayout.SOUTH);
-        
-        //action listeners for buttons
 
         //add habit to list
-        addHabitButton.addActionListener(e -> {
+        addHabitButton.addActionListener(e -> { //for daily habits
             String habitToText = habitInputField.getText().trim();
             if (habitToText.isEmpty()) {
                 JOptionPane.showMessageDialog(this,"Cannot have empty field.");
@@ -103,6 +104,17 @@ public class Dashboard extends JPanel {
             } else {
                 habitInputField.setText("");
                 habitsList.add(new JCheckBox(habitToText));
+                numOfHabits += 1;
+                
+                Component[] habits = habitsList.getComponents();
+                int selectedHabits = 0;
+                for(int i = habits.length - 1; i >= 0;i--) {
+                    if (habits[i] instanceof JCheckBox cb && cb.isSelected()) {
+                        selectedHabits++;
+                    }
+                }
+                progressBar.setMaximum(numOfHabits);
+                progressBar.setValue(selectedHabits);
                 habitsList.revalidate();
                 habitsList.repaint();
                 System.out.println("Habit added.");
@@ -134,14 +146,22 @@ public class Dashboard extends JPanel {
             if (northStarUserInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Cannot have empty input field.");
                 return;
-            } else {
-                JCheckBox newGoal = new JCheckBox(northStarUserInput);
-                newGoal.setAlignmentX(Component.LEFT_ALIGNMENT);
-                northStarList.add(newGoal);
-                System.out.println("North star goal added.");
-                northStarTextField.setText("");
-                northStarList.revalidate();
-                northStarList.repaint();
+            } else { //has value in textfield box
+                if (northStarGoalCount >= 3) {
+                    System.out.println("Max goals reached.");
+                    JOptionPane.showMessageDialog(this, "Max goals reached.");
+                    northStarTextField.setText("");
+                    return;
+                } else {
+                    JCheckBox newGoal = new JCheckBox(northStarUserInput);
+                    newGoal.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    northStarList.add(newGoal);
+                    System.out.println("North star goal added.");
+                    northStarGoalCount += 1;
+                    northStarTextField.setText("");
+                    northStarList.revalidate();
+                    northStarList.repaint();
+                }
             }
 
         });

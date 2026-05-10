@@ -6,7 +6,7 @@ A Java Swing desktop app for tracking daily habits and goals.
 
 ## How to Run
 1. Clone the repo
-2. Open in your IDE and run `MainFrame.java`
+2. Open in your IDE and run `Main.java`
 
 ## Features
 - Add/remove habits with checkboxes
