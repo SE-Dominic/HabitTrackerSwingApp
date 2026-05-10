@@ -36,7 +36,7 @@ public class Dashboard extends JPanel {
     }
     public Dashboard(MainFrame app) {
         //Set dashboard layout
-        setLayout(new BorderLayout(10, 10)); 
+        setLayout(new BorderLayout(10, 10));
         //WEST Panel -> Habits list
         JPanel habitsPanel = new JPanel(new BorderLayout());
         habitsPanel.setBorder(BorderFactory.createTitledBorder("Habits"));
@@ -68,6 +68,7 @@ public class Dashboard extends JPanel {
         JCheckBox testGoal = new JCheckBox("Test Goal");
         testGoal.setAlignmentX(Component.LEFT_ALIGNMENT); //center checkbox
         northStarList.add(testGoal);
+        northStarGoalCount++;
 
         JPanel centeredList = new JPanel(new FlowLayout(FlowLayout.CENTER));
         centeredList.add(northStarList);
@@ -139,12 +140,14 @@ public class Dashboard extends JPanel {
             for (int i = habits.length - 1; i >= 0; i--) {  // iterate backwards to safely remove
                 if (habits[i] instanceof JCheckBox cb && cb.isSelected()) {
                     habitsList.remove(cb);
+                    numOfHabits--;
                 }
             }
             updateProgressBar(habitsList);
             for (int i = northStarGoals.length - 1; i >= 0; i--) {  // iterate backwards to safely remove
                 if (northStarGoals[i] instanceof JCheckBox cb && cb.isSelected()) {
                     northStarList.remove(cb);
+                    northStarGoalCount--;
                 }
             }
             habitsList.revalidate();
@@ -158,7 +161,7 @@ public class Dashboard extends JPanel {
                 JOptionPane.showMessageDialog(this, "Cannot have empty input field.");
                 return;
             } else { //has value in textfield box
-                if (northStarGoalCount >= 3) {
+                if (northStarGoalCount == 3) {
                     System.out.println("Max goals reached.");
                     JOptionPane.showMessageDialog(this, "Max goals reached.");
                     northStarTextField.setText("");
@@ -168,7 +171,7 @@ public class Dashboard extends JPanel {
                     newGoal.setAlignmentX(Component.LEFT_ALIGNMENT);
                     northStarList.add(newGoal);
                     System.out.println("North star goal added.");
-                    northStarGoalCount += 1;
+                    northStarGoalCount++;
                     northStarTextField.setText("");
                     northStarList.revalidate();
                     northStarList.repaint();
