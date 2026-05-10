@@ -10,5 +10,7 @@ A Java Swing desktop app for tracking daily habits and goals.
 
 ## Features
 - Add/remove habits with checkboxes
-- Daily progress bar
+- Add/remove goals (North Star Goals) with checkboxes
+- Daily dynamic progress bar (changes progress as habits are selected/ unselected
 - User login and sign out
+- Monthly habit completion tracker
