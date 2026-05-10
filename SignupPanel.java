@@ -53,6 +53,12 @@ public class SignupPanel extends JPanel {
                     JOptionPane.showMessageDialog(this, "You must enter into both fields.");
                     return;
                 } else {
+                    if (DataStorage.getInstance().findUser(username, password)) { //check if user already exists
+                        JOptionPane.showMessageDialog(this, "Username already exists.");
+                        usernameInput.setText("");
+                        passwordInput.setText("");
+                        return;
+                    }
                     DataStorage.getInstance().addUser(new User(username, password));
                     System.out.println("Sign up successful.");
                     usernameInput.setText("");

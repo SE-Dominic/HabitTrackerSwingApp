@@ -37,16 +37,35 @@ public class Dashboard extends JPanel {
         progressBar.setValue(10);
         dailyProgress.add(progressBar, BorderLayout.CENTER);
 
+        /* NORTH STAR PANEL */
         JPanel northStar = new JPanel();
         northStar.setBorder(BorderFactory.createTitledBorder("North Start Goals"));
         northStar.setLayout(new BoxLayout(northStar, BoxLayout.Y_AXIS));
-        northStar.add(new JLabel("1. Goal one"));
-        northStar.add(new JLabel("2. Goal two"));
-        northStar.add(new JLabel("3. Goal three"));
+
+        JPanel northStarList = new JPanel(); //to hold north star goals
+        northStarList.setLayout(new BoxLayout(northStarList, BoxLayout.Y_AXIS)); //when new checkbox's are added they are along the y axis
+        northStarList.setAlignmentX(Component.CENTER_ALIGNMENT); //centers the list
+
+        JCheckBox testGoal = new JCheckBox("Test Goal");
+        testGoal.setAlignmentX(Component.LEFT_ALIGNMENT); //center checkbox
+        northStarList.add(testGoal);
+
+        JPanel centeredList = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        centeredList.add(northStarList);
+
+        //for goal input and add button
+        JPanel northstarInput = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextField northStarTextField = new JTextField(15);
+        JButton addNorthStarButton = new JButton("Add");
+        northstarInput.add(northStarTextField);
+        northstarInput.add(addNorthStarButton);
+        
+        northStar.add(centeredList, BorderLayout.CENTER);
+        northStar.add(northstarInput, BorderLayout.SOUTH);
 
         centerPanel.add(dailyProgress);
         centerPanel.add(northStar);
-
+        
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.setBorder(BorderFactory.createTitledBorder("Monthly Completion Chart"));
         eastPanel.setPreferredSize(new Dimension(200, 0));
@@ -93,14 +112,38 @@ public class Dashboard extends JPanel {
             app.showScreen(MainFrame.SIGNUP);
         });
         deleteHabitButton.addActionListener(e -> {
+            Component[] northStarGoals = northStarList.getComponents();
             Component[] habits = habitsList.getComponents();
             for (int i = habits.length - 1; i >= 0; i--) {  // iterate backwards to safely remove
                 if (habits[i] instanceof JCheckBox cb && cb.isSelected()) {
                     habitsList.remove(cb);
                 }
             }
+            for (int i = northStarGoals.length - 1; i >= 0; i--) {  // iterate backwards to safely remove
+                if (northStarGoals[i] instanceof JCheckBox cb && cb.isSelected()) {
+                    northStarList.remove(cb);
+                }
+            }
             habitsList.revalidate();
             habitsList.repaint();
+            northStarList.revalidate();
+            northStarList.repaint();
+        });
+        addNorthStarButton.addActionListener(e -> {
+            String northStarUserInput = northStarTextField.getText().strip();
+            if (northStarUserInput.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Cannot have empty input field.");
+                return;
+            } else {
+                JCheckBox newGoal = new JCheckBox(northStarUserInput);
+                newGoal.setAlignmentX(Component.LEFT_ALIGNMENT);
+                northStarList.add(newGoal);
+                System.out.println("North star goal added.");
+                northStarTextField.setText("");
+                northStarList.revalidate();
+                northStarList.repaint();
+            }
+
         });
     }
 }
