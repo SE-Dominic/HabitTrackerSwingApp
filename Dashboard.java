@@ -18,6 +18,22 @@ public class Dashboard extends JPanel {
     private JButton signOutButton;
     private JButton deleteHabitButton;
     private JTextField habitInputField;
+    JProgressBar progressBar;
+    private void updateProgressBar(JPanel habitsList) {
+        Component[] habits = habitsList.getComponents();
+        if (habits.length == 0) {
+            progressBar.setValue(0);
+            return;
+        }
+    int selectedHabits = 0;
+    for (Component habit : habits) {
+        if (habit instanceof JCheckBox cb && cb.isSelected()) {
+            selectedHabits++;
+        }
+    }
+        int newValue = (int) ((double) selectedHabits / habits.length * 100);
+        progressBar.setValue(newValue);
+    }
     public Dashboard(MainFrame app) {
         //Set dashboard layout
         setLayout(new BorderLayout(10, 10)); 
@@ -26,8 +42,6 @@ public class Dashboard extends JPanel {
         habitsPanel.setBorder(BorderFactory.createTitledBorder("Habits"));
         JPanel habitsList = new JPanel();
         habitsList.setLayout(new BoxLayout(habitsList, BoxLayout.Y_AXIS)); //show list vertically
-        habitsList.add(new JCheckBox("Test Habit"));
-        numOfHabits += 1;
         habitsPanel.add(new JScrollPane(habitsList), BorderLayout.CENTER);
         habitsPanel.setPreferredSize(new Dimension(200, 0));
 
@@ -35,8 +49,11 @@ public class Dashboard extends JPanel {
         
         JPanel dailyProgress = new JPanel(new BorderLayout());
         dailyProgress.setBorder(BorderFactory.createTitledBorder("Daily Progress"));
-        JProgressBar progressBar = new JProgressBar(0, numOfHabits);
+        
+        progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0); //initial value of progress bar = 0
+        progressBar.setStringPainted(true);
+        
         dailyProgress.add(progressBar, BorderLayout.CENTER);
 
         /* NORTH STAR PANEL */
@@ -51,7 +68,6 @@ public class Dashboard extends JPanel {
         JCheckBox testGoal = new JCheckBox("Test Goal");
         testGoal.setAlignmentX(Component.LEFT_ALIGNMENT); //center checkbox
         northStarList.add(testGoal);
-        northStarGoalCount += 1;
 
         JPanel centeredList = new JPanel(new FlowLayout(FlowLayout.CENTER));
         centeredList.add(northStarList);
@@ -103,18 +119,12 @@ public class Dashboard extends JPanel {
                 return;
             } else {
                 habitInputField.setText("");
-                habitsList.add(new JCheckBox(habitToText));
+                JCheckBox newHabit = new JCheckBox(habitToText);
+                newHabit.addItemListener(e2 -> updateProgressBar(habitsList));
+                habitsList.add(newHabit);
                 numOfHabits += 1;
-                
-                Component[] habits = habitsList.getComponents();
-                int selectedHabits = 0;
-                for(int i = habits.length - 1; i >= 0;i--) {
-                    if (habits[i] instanceof JCheckBox cb && cb.isSelected()) {
-                        selectedHabits++;
-                    }
-                }
-                progressBar.setMaximum(numOfHabits);
-                progressBar.setValue(selectedHabits);
+            
+                updateProgressBar(habitsList);
                 habitsList.revalidate();
                 habitsList.repaint();
                 System.out.println("Habit added.");
@@ -131,6 +141,7 @@ public class Dashboard extends JPanel {
                     habitsList.remove(cb);
                 }
             }
+            updateProgressBar(habitsList);
             for (int i = northStarGoals.length - 1; i >= 0; i--) {  // iterate backwards to safely remove
                 if (northStarGoals[i] instanceof JCheckBox cb && cb.isSelected()) {
                     northStarList.remove(cb);
@@ -163,7 +174,6 @@ public class Dashboard extends JPanel {
                     northStarList.repaint();
                 }
             }
-
         });
     }
 }
