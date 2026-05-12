@@ -1,7 +1,7 @@
-package src.main.java.client;
+package client;
 import javax.swing.*;
 
-import src.main.java.backend.model.User;
+import shared.User;
 
 import java.awt.*; //used for GridLayout
 

@@ -1,7 +1,7 @@
 package client;
 import java.util.HashMap;
 
-import src.main.java.backend.model.User;
+import shared.User;
 
 public class DataStorage {
     private HashMap<String, User> users;

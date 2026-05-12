@@ -1,9 +1,0 @@
-src/main/java/HabitTrackerApplication.class
-src/main/java/client/MainFrame.class
-src/main/java/backend/service/UserService.class
-src/main/java/client/LoginPanel.class
-src/main/java/client/SignupPanel.class
-src/main/java/client/DataStorage.class
-src/main/java/backend/model/User.class
-src/main/java/client/Dashboard.class
-src/main/java/client/Main.class

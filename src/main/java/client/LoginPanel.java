@@ -1,4 +1,4 @@
-package src.main.java.client;
+package client;
 import java.awt.*;
 import javax.swing.*;
 public class LoginPanel extends JPanel {
